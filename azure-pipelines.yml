@@ -34,21 +34,21 @@ stages:
         arguments: '--configuration $(buildConfiguration) --no-restore'
 
     - task: DotNetCoreCLI@2
-      displayName: 'DotNet Core Package WebApp'
+      displayName: 'DotNet Core Package App'
       inputs:
         command: publish
         arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
         projects: '**/*.sln'
         zipAfterPublish: true
 
-    - task: DotNetCoreCLI@2
-      displayName: 'DotNet Core Package Function'
-      inputs:
-        command: publish
-        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
-        projects: '**/*Function.csproj'
-        publishWebProjects: false
-        zipAfterPublish: true
+    # - task: DotNetCoreCLI@2
+    #   displayName: 'DotNet Core Package Function'
+    #   inputs:
+    #     command: publish
+    #     arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
+    #     projects: '**/*Function.csproj'
+    #     publishWebProjects: false
+    #     zipAfterPublish: true
 
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Artifacts'
