@@ -11,6 +11,7 @@ variables:
   azureSubscriptionName: 'DevTest'
   resourceGroupName: 'rac-demo-app'
   armTemplateParameters: '-coreInfrastructureName $(coreInfrastructureName) -webAppName $(webAppName) -azFunctionName $(azFunctionName) -sendMailLogiAppName $(sendMailLogiAppName)'
+  coverletCoverageExclusions: ''
 
 stages:
 - stage: Build
@@ -40,7 +41,7 @@ stages:
         projects: |
           **/*[Tt]ests/*.csproj
           !**/*Acceptance[Tt]ests/*.csproj
-        arguments: '--configuration ${{ parameters.buildConfiguration}} --no-build /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"${{ parameters.coverletCoverageExclusions }}\"" /p:CoverletOutput=$(Common.TestResultsDirectory)\Coverage\ /p:MergeWith=$(Common.TestResultsDirectory)\Coverage\coverage.json'
+        arguments: '--configuration $(buildConfiguration) --no-build /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"$(coverletCoverageExclusions)\"" /p:CoverletOutput=$(Common.TestResultsDirectory)\Coverage\ /p:MergeWith=$(Common.TestResultsDirectory)\Coverage\coverage.json'
 
     # - task: DotNetCoreCLI@2
     #   displayName: 'DotNet Core Package WebApp'
