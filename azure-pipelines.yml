@@ -1,16 +1,6 @@
 variables:
-  #buildConfiguration: 'Release'
-  #poolName: 'rac-pool'
-  System.Debug: 'false'
-  #solution: '**/*.sln'
-  #buildPlatform: 'Any CPU'
-  #coreInfrastructureName: 'rac-core-infra-demo'
-  #webAppName: 'rac-fileinflate-func-$(Environment.Name)'
   functionName: 'rac-fileinflate-$(Environment.Name)'
-  #sendMailLogiAppName: 'rac-sendemail-$(Environment.Name)'
-  #azureSubscriptionName: 'DevTest'
   resourceGroupName: 'rac-demo-app'
-  #armTemplateParameters: '-coreInfrastructureName $(coreInfrastructureName) -webAppName $(webAppName) -azFunctionName $(azFunctionName) -sendMailLogiAppName $(sendMailLogiAppName)'
   coverletCoverageExclusions: ''
 
 # GitHub Repo that conatins build templates. Reference https://docs.microsoft.com/en-us/azure/devops/pipelines/process/templates?view=vsts#using-other-repositories
@@ -21,6 +11,12 @@ resources:
     name: janisBerz/rac-azure-devops-templates
     endpoint: 'janisBerz'
 
+trigger:
+- master
+pr:
+- master
+
+# Build step
 stages:
 - stage: Build
   jobs:
@@ -34,130 +30,3 @@ stages:
     parameters:
       webAppName: ''
       functionName: '$(FunctionName)'
-
-# - stage: Deployment_Dev
-#   jobs:
-#   - deployment: deployment_dev
-#     displayName: 'Dev'
-#     #pool: '$(poolName)'
-#     environment: 'dev'
-#     # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - template: templates/deployment/deployment.yml@azureDevOpsTemplates
-
-# - stage: Deployment_UAT
-#   jobs:
-#   - deployment: deployment_uat
-#     displayName: 'UAT'
-#     pool: '$(poolName)'
-#     environment: 'test'
-#     # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - template: templates/deployment/deployment.yml@azureDevOpsTemplate
-
-# - stage: Deployment_Prod
-#   jobs:
-#   - deployment: deployment_prod
-#     displayName: 'Prod'
-#     pool: '$(poolName)'
-#     environment: 'prod'
-#     # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - template: templates/deployment/deployment.yml@azureDevOpsTemplate
-
-#   - job: Build
-#     pool: '$(poolName)'
-#     # workspace:
-#     #   clean: all
-#     steps:
-#     - task: DotNetCoreCLI@2
-#       displayName: 'DotNet Core Restore'
-#       inputs:
-#         command: restore
-#         projects: '**/*.sln'
-
-#     - task: DotNetCoreCLI@2
-#       displayName: 'DotNet Core Build'
-#       inputs:
-#         command: build
-#         projects: '**/*.sln'
-#         arguments: '--configuration $(buildConfiguration) --no-restore'
-
-#     - task: DotNetCoreCLI@2
-#       displayName: Run all test projects
-#       inputs:
-#         command: test
-#         projects: |
-#           **/*[Tt]ests/*.csproj
-#           !**/*Acceptance[Tt]ests/*.csproj
-#         arguments: '--configuration $(buildConfiguration) --no-build /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"$(coverletCoverageExclusions)\"" /p:CoverletOutput=$(Common.TestResultsDirectory)\Coverage\ /p:MergeWith=$(Common.TestResultsDirectory)\Coverage\coverage.json'
-
-#     - task: PublishCodeCoverageResults@1
-#       displayName: 'Publish code coverage'
-#       inputs:
-#         codeCoverageTool: Cobertura
-#         summaryFileLocation: '$(Common.TestResultsDirectory)\Coverage\coverage.cobertura.xml'
-#         reportDirectory: '$(Common.TestResultsDirectory)\Coverage'
-#         failIfCoverageEmpty: true
-
-#     # - task: DotNetCoreCLI@2
-#     #   displayName: 'DotNet Core Package WebApp'
-#     #   inputs:
-#     #     command: publish
-#     #     arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
-#     #     projects: '**/*.sln'
-#     #     zipAfterPublish: true
-
-#     - task: DotNetCoreCLI@2
-#       displayName: 'DotNet Core Package Function'
-#       inputs:
-#         command: publish
-#         arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
-#         projects: '**/*.sln'
-#         publishWebProjects: false
-#         zipAfterPublish: true
-#         #modifyOutputPath: true
-
-#     - task: PublishPipelineArtifact@1
-#       displayName: 'Publish Artifacts'
-#       inputs:
-#         path: $(build.artifactstagingdirectory)
-#         artifact: App
-
-# - stage: Deployment_Dev
-#   jobs:
-#   - deployment: deployment_dev
-#     displayName: 'Dev'
-#     pool: '$(poolName)'
-#     environment: 'dev'
-#     # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - template: deployment.yml
-
-# # - stage: Deployment_Test
-# #   jobs:
-# #   - deployment: deployment_test
-# #     displayName: 'Test'
-# #     pool:
-# #       vmImage: 'windows-2019'
-# #     environment: 'test'
-# #     condition: |
-# #       and(succeeded(),
-# #       eq(variables['Build.Reason'], 'PullRequest'))
-# #     strategy:
-# #       runOnce:
-# #         deploy:
-# #           steps:
-# #           - template: deployment.yml
