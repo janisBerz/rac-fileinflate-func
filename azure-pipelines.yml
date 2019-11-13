@@ -20,17 +20,6 @@ stages:
     # workspace:
     #   clean: all
     steps:
-    - task: AzureResourceGroupDeployment@2
-      displayName: 'Provision Infrastructure'
-      inputs:
-        azureSubscription: $(azureSubscriptionName)
-        resourceGroupName: '$(resourceGroupName)'
-        location: 'West Europe'
-        csmFile: $(System.DefaultWorkingDirectory)/templates/deployment/deployment.json
-        csmParametersFile: $(System.DefaultWorkingDirectory)/templates/deployment/deployment.parameters.json
-        overrideParameters: '$(armTemplateParameters)'
-        deploymentMode: 'Validation'
-
     - task: DotNetCoreCLI@2
       displayName: 'DotNet Core Restore'
       inputs:
@@ -44,25 +33,55 @@ stages:
         projects: '**/*.sln'
         arguments: '--configuration $(buildConfiguration) --no-restore'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'DotNet Core Package WebApp'
-      inputs:
-        command: publish
-        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
-        projects: '**/*.sln'
-        zipAfterPublish: true
+    # - task: DotNetCoreCLI@2
+    #   displayName: 'DotNet Core Package WebApp'
+    #   inputs:
+    #     command: publish
+    #     arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
+    #     projects: '**/*.sln'
+    #     zipAfterPublish: true
 
     - task: DotNetCoreCLI@2
       displayName: 'DotNet Core Package Function'
       inputs:
         command: publish
         arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
-        projects: '**/*Function.csproj'
+        projects: '**/*.sln'
         publishWebProjects: false
         zipAfterPublish: true
+        #modifyOutputPath: true
 
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Artifacts'
       inputs:
         path: $(build.artifactstagingdirectory)
         artifact: App
+
+- stage: Deployment_Dev
+  jobs:
+  - deployment: deployment_dev
+    displayName: 'Dev'
+    pool: '$(poolName)'
+    environment: 'dev'
+    # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - template: deployment.yml
+
+# - stage: Deployment_Test
+#   jobs:
+#   - deployment: deployment_test
+#     displayName: 'Test'
+#     pool:
+#       vmImage: 'windows-2019'
+#     environment: 'test'
+#     condition: |
+#       and(succeeded(),
+#       eq(variables['Build.Reason'], 'PullRequest'))
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - template: deployment.yml

@@ -1,0 +1,10 @@
+steps:
+  #- task: DownloadPipelineArtifact@2
+
+  - task: AzureRmWebAppDeployment@4
+    displayName: 'Azure App Service Deploy'
+    inputs:
+      appType: functionApp
+      ConnectedServiceName: $(azureSubscriptionName)
+      WebAppName: '$(WebAppName)'
+      package: $(Pipeline.Workspace)/app/*.zip

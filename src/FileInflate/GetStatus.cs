@@ -37,7 +37,7 @@ namespace AzUnzipEverything
                     // Create an Http Response with Status Accepted (202) to let the client know that the original request hasn't yet been fully processed. 
                     ActionResult response = new AcceptedResult(checkStatusLocacion, message); // The GET status location is returned as an http header
                     //req.HttpContext.Response.Headers.Add("x-functions-key", sourceGetStatusKey); // add getstatus key as header 
-                    req.HttpContext.Response.Headers.Add("retry-after", "10"); // To inform the client how long to wait before checking the status. 
+                    req.HttpContext.Response.Headers.Add("retry-after", "3"); // To inform the client how long to wait before checking the status. 
                     return response;
                 }
                 else if (status.RuntimeStatus == OrchestrationRuntimeStatus.Completed)
