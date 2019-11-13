@@ -1,5 +1,5 @@
 steps:
-  - task: DownloadPipelineArtifact@2
+  #- task: DownloadPipelineArtifact@2
 
   - task: AzureRmWebAppDeployment@4
     displayName: 'Azure App Service Deploy'
