@@ -47,7 +47,7 @@ stages:
       runOnce:
         deploy:
           steps:
-          - template: deployment/deployment.yml@azureDevOpsTemplates
+          - template: templates/deployment/deployment.yml@azureDevOpsTemplates
 
 - stage: Deployment_UAT
   jobs:
@@ -60,7 +60,7 @@ stages:
       runOnce:
         deploy:
           steps:
-          - template: deployment/deployment.yml@azureDevOpsTemplates
+          - template: templates/deployment/deployment.yml@azureDevOpsTemplate
 
 - stage: Deployment_Prod
   jobs:
@@ -73,7 +73,7 @@ stages:
       runOnce:
         deploy:
           steps:
-          - template: deployment/deployment.yml@azureDevOpsTemplates
+          - template: templates/deployment/deployment.yml@azureDevOpsTemplate
 
 #   - job: Build
 #     pool: '$(poolName)'
