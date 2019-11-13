@@ -9,7 +9,6 @@ namespace FileInflate.Tests
         [Fact]
         public void SetLocalPathToTempFolder()
         {
-            
             var result = Helper.SetLocalPath("SomeFileName.zip");
             Assert.NotNull(result);
 
