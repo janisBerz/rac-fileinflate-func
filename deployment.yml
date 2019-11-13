@@ -8,11 +8,3 @@ steps:
       ConnectedServiceName: $(azureSubscriptionName)
       WebAppName: '$(WebAppName)-$(Environment.Name)'
       package: $(Pipeline.Workspace)/app/*.zip
-
-  - task: AzureRmWebAppDeployment@4
-    displayName: 'Azure App Service Deploy'
-    inputs:
-      appType: functionApp
-      ConnectedServiceName: $(azureSubscriptionName)
-      WebAppName: '$(WebAppName)-$(Environment.Name)'
-      package: $(Pipeline.Workspace)/app/*Function.zip
