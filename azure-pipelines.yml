@@ -33,13 +33,13 @@ stages:
         projects: '**/*.sln'
         arguments: '--configuration $(buildConfiguration) --no-restore'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'DotNet Core Package WebApp'
-      inputs:
-        command: publish
-        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
-        projects: '**/*.sln'
-        zipAfterPublish: true
+    # - task: DotNetCoreCLI@2
+    #   displayName: 'DotNet Core Package WebApp'
+    #   inputs:
+    #     command: publish
+    #     arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
+    #     projects: '**/*.sln'
+    #     zipAfterPublish: true
 
     - task: DotNetCoreCLI@2
       displayName: 'DotNet Core Package Function'
