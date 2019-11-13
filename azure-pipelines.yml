@@ -6,7 +6,7 @@ variables:
   #buildPlatform: 'Any CPU'
   #coreInfrastructureName: 'rac-core-infra-demo'
   #webAppName: 'rac-fileinflate-func-$(Environment.Name)'
-  azFunctionName: 'rac-fileinflate-$(Environment.Name)'
+  functionName: 'rac-fileinflate-$(Environment.Name)'
   #sendMailLogiAppName: 'rac-sendemail-$(Environment.Name)'
   #azureSubscriptionName: 'DevTest'
   resourceGroupName: 'rac-demo-app'
@@ -39,8 +39,8 @@ stages:
 # Deployment steps
   - template: jobs/deployment.yml@azureDevOpsTemplates
     parameters:
-      WebAppName: '$(azFunctionName)'
-      azFunctionName: ''
+      webAppName: ''
+      functionName: '$(azFunctionName)'
 
 # - stage: Deployment_Dev
 #   jobs:
