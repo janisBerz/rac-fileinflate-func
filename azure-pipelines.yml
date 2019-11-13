@@ -13,6 +13,15 @@ variables:
   armTemplateParameters: '-coreInfrastructureName $(coreInfrastructureName) -webAppName $(webAppName) -azFunctionName $(azFunctionName) -sendMailLogiAppName $(sendMailLogiAppName)'
   coverletCoverageExclusions: ''
 
+# GitHub Repo that conatins build templates. Reference https://docs.microsoft.com/en-us/azure/devops/pipelines/process/templates?view=vsts#using-other-repositories
+resources:
+  repositories:
+  - repository: azureDevOpsTemplates
+    type: github
+    name: janisBerz/rac-azure-devops-templates
+    endpoint: 'janisBerz'
+
+
 stages:
 - stage: Build
   jobs:
