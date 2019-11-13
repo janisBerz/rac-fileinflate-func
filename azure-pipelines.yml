@@ -13,7 +13,7 @@ resources:
 
 trigger:
 - master
-- tags/v*
+- refs/tags
 pr:
 - master
 
