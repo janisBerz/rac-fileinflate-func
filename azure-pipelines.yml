@@ -20,17 +20,6 @@ stages:
     # workspace:
     #   clean: all
     steps:
-    - task: AzureResourceGroupDeployment@2
-      displayName: 'Provision Infrastructure'
-      inputs:
-        azureSubscription: $(azureSubscriptionName)
-        resourceGroupName: '$(resourceGroupName)'
-        location: 'West Europe'
-        csmFile: $(System.DefaultWorkingDirectory)/templates/deployment/deployment.json
-        csmParametersFile: $(System.DefaultWorkingDirectory)/templates/deployment/deployment.parameters.json
-        overrideParameters: '$(armTemplateParameters)'
-        deploymentMode: 'Validation'
-
     - task: DotNetCoreCLI@2
       displayName: 'DotNet Core Restore'
       inputs:
