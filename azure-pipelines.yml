@@ -49,7 +49,7 @@ stages:
         projects: '**/*.sln'
         publishWebProjects: false
         zipAfterPublish: true
-        modifyOutputPath: true
+        #modifyOutputPath: true
 
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Artifacts'
