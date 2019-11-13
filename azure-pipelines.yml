@@ -12,8 +12,10 @@ resources:
     endpoint: 'janisBerz'
 
 trigger:
-- master
-- tag/v*
+  branches:
+    include:
+      - master
+      - refs/tags/v*
 pr:
 - master
 
