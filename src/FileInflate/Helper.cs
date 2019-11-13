@@ -45,6 +45,17 @@ namespace AzUnzipEverything
             {
                 Directory.CreateDirectory(zipUnarchivedPath);
             }
+
+            // Clean the temp folder
+            var dir = new DirectoryInfo(zipUnarchivedPath);
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                file.Delete();
+            }
+            foreach (DirectoryInfo directory in dir.GetDirectories())
+            {
+                directory.Delete(true);
+            }
             return localZipFile;
         }
     }
