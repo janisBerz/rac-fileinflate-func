@@ -27,14 +27,7 @@ stages:
   - template: jobs/dotNetCore.yml@azureDevOpsTemplates # Template reference
     parameters:
       sonarCloudExtraProperties: $(sonarCloudExtraProperties)
-      integrationTestsAppSettingsTransform: $(integrationTestsAppSettingsTransform)
       coverletCoverageExclusions: $(coverletCoverageExclusions)
-      apiDirectory: $(apiDirectory)
-      dalWorkingDirectory: $(dalWorkingDirectory)
-      keyVaultName: $(keyVaultName)
-      secretsFilter: $(secretsFilter),
-      infraKeyVaultName: $(infraKeyVaultName)
-      infraSecretsFilter: $(infraSecretsFilter)
 
 # Deployment steps
   - template: jobs/deployment.yml@azureDevOpsTemplates
