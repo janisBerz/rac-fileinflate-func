@@ -25,7 +25,7 @@ stages:
   jobs:
   - template: jobs/dotNetCore.yml@azureDevOpsTemplates # Template reference
     parameters:
-      functionName: 'rac-fileinflate-$(Environment.Name)'
+      functionName: '$(functionName)'
       sonarCloudExtraProperties: $(sonarCloudExtraProperties)
       coverletCoverageExclusions: $(coverletCoverageExclusions)
 
@@ -33,4 +33,4 @@ stages:
   - template: jobs/deployment.yml@azureDevOpsTemplates
     parameters:
       webAppName: ''
-      functionName: '$(FunctionName)'
+      functionName: '$(functionName)'
