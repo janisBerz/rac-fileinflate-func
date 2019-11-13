@@ -38,7 +38,7 @@ stages:
       inputs:
         command: publish
         arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
-        projects: '**/*.sln'
+        projects: '*.sln'
         zipAfterPublish: true
 
     # - task: DotNetCoreCLI@2
