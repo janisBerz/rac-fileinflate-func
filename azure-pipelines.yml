@@ -36,44 +36,46 @@ stages:
       infraKeyVaultName: $(infraKeyVaultName)
       infraSecretsFilter: $(infraSecretsFilter)
 
-- stage: Deployment_Dev
-  jobs:
-  - deployment: deployment_dev
-    displayName: 'Dev'
-    #pool: '$(poolName)'
-    environment: 'dev'
-    # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - template: templates/deployment/deployment.yml@azureDevOpsTemplates
+  - template: jobs/deployment.yml@azureDevOpsTemplates
 
-- stage: Deployment_UAT
-  jobs:
-  - deployment: deployment_uat
-    displayName: 'UAT'
-    pool: '$(poolName)'
-    environment: 'test'
-    # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - template: templates/deployment/deployment.yml@azureDevOpsTemplate
+# - stage: Deployment_Dev
+#   jobs:
+#   - deployment: deployment_dev
+#     displayName: 'Dev'
+#     #pool: '$(poolName)'
+#     environment: 'dev'
+#     # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - template: templates/deployment/deployment.yml@azureDevOpsTemplates
 
-- stage: Deployment_Prod
-  jobs:
-  - deployment: deployment_prod
-    displayName: 'Prod'
-    pool: '$(poolName)'
-    environment: 'prod'
-    # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - template: templates/deployment/deployment.yml@azureDevOpsTemplate
+# - stage: Deployment_UAT
+#   jobs:
+#   - deployment: deployment_uat
+#     displayName: 'UAT'
+#     pool: '$(poolName)'
+#     environment: 'test'
+#     # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - template: templates/deployment/deployment.yml@azureDevOpsTemplate
+
+# - stage: Deployment_Prod
+#   jobs:
+#   - deployment: deployment_prod
+#     displayName: 'Prod'
+#     pool: '$(poolName)'
+#     environment: 'prod'
+#     # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - template: templates/deployment/deployment.yml@azureDevOpsTemplate
 
 #   - job: Build
 #     pool: '$(poolName)'
