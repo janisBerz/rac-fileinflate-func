@@ -33,7 +33,7 @@ stages:
   - template: jobs/deployment.yml@azureDevOpsTemplates
     parameters:
       webAppName: ''
-      functionName: '$(azFunctionName)'
+      functionName: '$(FunctionName)'
 
 # - stage: Deployment_Dev
 #   jobs:
