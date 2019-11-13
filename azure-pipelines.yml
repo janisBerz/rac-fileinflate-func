@@ -43,6 +43,14 @@ stages:
           !**/*Acceptance[Tt]ests/*.csproj
         arguments: '--configuration $(buildConfiguration) --no-build /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"$(coverletCoverageExclusions)\"" /p:CoverletOutput=$(Common.TestResultsDirectory)\Coverage\ /p:MergeWith=$(Common.TestResultsDirectory)\Coverage\coverage.json'
 
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage'
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(Common.TestResultsDirectory)\Coverage\coverage.cobertura.xml'
+        reportDirectory: '$(Common.TestResultsDirectory)\Coverage'
+        failIfCoverageEmpty: true
+
     # - task: DotNetCoreCLI@2
     #   displayName: 'DotNet Core Package WebApp'
     #   inputs:
