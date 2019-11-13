@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{61F3F91E-89A3-4A47-96E9-D746956EFDE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileInflateFunction", "src\FileInflate\FileInflateFunction.csproj", "{731A202B-DA77-47FE-BF56-37751AC9FCC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileInflateFunction", "src\FileInflate\FileInflate.csproj", "{731A202B-DA77-47FE-BF56-37751AC9FCC0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{A9A4B9DE-E0B9-4E8A-9355-C26BD67EEF68}"
 EndProject
