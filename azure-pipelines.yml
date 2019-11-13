@@ -49,9 +49,39 @@ stages:
         projects: '**/*.sln'
         publishWebProjects: false
         zipAfterPublish: true
+        modifyOutputPath: true
 
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Artifacts'
       inputs:
         path: $(build.artifactstagingdirectory)
         artifact: App
+
+- stage: Deployment_Dev
+  jobs:
+  - deployment: deployment_dev
+    displayName: 'Dev'
+    pool: '$(poolName)'
+    environment: 'dev'
+    # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - template: deployment.yml
+
+# - stage: Deployment_Test
+#   jobs:
+#   - deployment: deployment_test
+#     displayName: 'Test'
+#     pool:
+#       vmImage: 'windows-2019'
+#     environment: 'test'
+#     condition: |
+#       and(succeeded(),
+#       eq(variables['Build.Reason'], 'PullRequest'))
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - template: deployment.yml
