@@ -1,0 +1,68 @@
+variables:
+  buildConfiguration: 'Release'
+  poolName: 'rac-pool'
+  System.Debug: 'false'
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  coreInfrastructureName: 'rac-core-infra-demo'
+  webAppName: 'rac-fileupload-web-$(Environment.Name)'
+  azFunctionName: 'rac-fileinflate-$(Environment.Name)'
+  sendMailLogiAppName: 'rac-sendemail-$(Environment.Name)'
+  azureSubscriptionName: 'DevTest'
+  resourceGroupName: 'rac-demo-app'
+  armTemplateParameters: '-coreInfrastructureName $(coreInfrastructureName) -webAppName $(webAppName) -azFunctionName $(azFunctionName) -sendMailLogiAppName $(sendMailLogiAppName)'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool: '$(poolName)'
+    # workspace:
+    #   clean: all
+    steps:
+    - task: AzureResourceGroupDeployment@2
+      displayName: 'Provision Infrastructure'
+      inputs:
+        azureSubscription: $(azureSubscriptionName)
+        resourceGroupName: '$(resourceGroupName)'
+        location: 'West Europe'
+        csmFile: $(System.DefaultWorkingDirectory)/templates/deployment/deployment.json
+        csmParametersFile: $(System.DefaultWorkingDirectory)/templates/deployment/deployment.parameters.json
+        overrideParameters: '$(armTemplateParameters)'
+        deploymentMode: 'Validation'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'DotNet Core Restore'
+      inputs:
+        command: restore
+        projects: '**/*.sln'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'DotNet Core Build'
+      inputs:
+        command: build
+        projects: '**/*.sln'
+        arguments: '--configuration $(buildConfiguration) --no-restore'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'DotNet Core Package WebApp'
+      inputs:
+        command: publish
+        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
+        projects: '**/*.sln'
+        zipAfterPublish: true
+
+    - task: DotNetCoreCLI@2
+      displayName: 'DotNet Core Package Function'
+      inputs:
+        command: publish
+        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory) --no-build'
+        projects: '**/*Function.csproj'
+        publishWebProjects: false
+        zipAfterPublish: true
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Artifacts'
+      inputs:
+        path: $(build.artifactstagingdirectory)
+        artifact: App
