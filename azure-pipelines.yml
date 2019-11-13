@@ -36,7 +36,11 @@ stages:
       infraKeyVaultName: $(infraKeyVaultName)
       infraSecretsFilter: $(infraSecretsFilter)
 
+# Deployment steps
   - template: jobs/deployment.yml@azureDevOpsTemplates
+    parameters:
+      WebAppName: '$(azFunctionName)'
+      azFunctionName: ''
 
 # - stage: Deployment_Dev
 #   jobs:
