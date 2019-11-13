@@ -24,7 +24,7 @@ resources:
 stages:
 - stage: Build
   jobs:
-  - template: jobs/angularDotNetCore.yml@azureDevOpsTemplates # Template reference
+  - template: jobs/dotNetCore.yml@azureDevOpsTemplates # Template reference
     parameters:
       sonarCloudExtraProperties: $(sonarCloudExtraProperties)
       integrationTestsAppSettingsTransform: $(integrationTestsAppSettingsTransform)
@@ -35,6 +35,46 @@ stages:
       secretsFilter: $(secretsFilter),
       infraKeyVaultName: $(infraKeyVaultName)
       infraSecretsFilter: $(infraSecretsFilter)
+
+- stage: Deployment_Dev
+  jobs:
+  - deployment: deployment_dev
+    displayName: 'Dev'
+    #pool: '$(poolName)'
+    environment: 'dev'
+    # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - template: deployment/deployment.yml@azureDevOpsTemplates
+
+- stage: Deployment_UAT
+  jobs:
+  - deployment: deployment_uat
+    displayName: 'UAT'
+    pool: '$(poolName)'
+    environment: 'test'
+    # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - template: deployment/deployment.yml@azureDevOpsTemplates
+
+- stage: Deployment_Prod
+  jobs:
+  - deployment: deployment_prod
+    displayName: 'Prod'
+    pool: '$(poolName)'
+    environment: 'prod'
+    # condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature'))
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - template: deployment/deployment.yml@azureDevOpsTemplates
+
 #   - job: Build
 #     pool: '$(poolName)'
 #     # workspace:
